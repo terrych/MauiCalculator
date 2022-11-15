@@ -89,5 +89,21 @@ namespace MauiCalculator.Lib.Test
             calc.Append("1+(((2+3)×(1+3×2)-15÷(1+2×2))÷(2+2)×2-1)÷5");
             Assert.Equal(4, double.Parse(calc.Calculate()), _precision);
         }
+
+        [Fact]
+        public void Br2Plus1ClbrTimesMinusBr3Plus6ClbrIsMinus27()
+        {
+            var calc = new Calculator();
+            calc.Append("(2+1)×-(3+6)");
+            Assert.Equal(-27, double.Parse(calc.Calculate()));
+        }
+
+        [Fact]
+        public void Br2Plus1ClbrPlusMinusBr3Plus6ClbrIsMinus6()
+        {
+            var calc = new Calculator();
+            calc.Append("(2+1)+-(3+6)");
+            Assert.Equal(-6, double.Parse(calc.Calculate()));
+        }
     }
 }

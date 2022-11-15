@@ -1,4 +1,6 @@
-﻿namespace MauiCalculator.Lib
+﻿using System.Text;
+
+namespace MauiCalculator.Lib
 {
     internal class OperatorNode // should probably test this directly instead of calculator, would then need to change visibility
     {
@@ -13,6 +15,25 @@
 
         public OperatorNode(string input)
         {
+            int i = 0;
+            /* Handle minus in front of brackets. 
+             * Other situations should be equivalent 
+             * to prepending the minus with a zero. */
+            while (i < input.Length-1)
+            {
+                if (input[i] == '-' && input[i+1] == '(')
+                {
+                    var left = input.Substring(0, i);
+                    var right = input.Substring(i+1);
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(left);
+                    sb.Append("(-1)×");
+                    sb.Append(right);
+                    input = sb.ToString();
+                }
+                i++;
+            }
+
             Calculation = input;
             PopulateProperties(input);
             if (string.IsNullOrEmpty(Error))
