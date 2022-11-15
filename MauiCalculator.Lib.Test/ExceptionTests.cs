@@ -69,5 +69,14 @@ namespace MauiCalculator.Lib.Test
             calculator.Calculate();
             Assert.True(string.Equals("0", calculator.Calculate()));
         }
+
+        [Fact]
+        public void NoOperatorBetweenBracketAndNumberHandled()
+        {
+            var calculator = new Calculator();
+            calculator.Append("(9+3)9");
+            calculator.Calculate();
+            Assert.True(string.Equals("Failed to parse input", calculator.Calculate()));
+        }
     }
 }

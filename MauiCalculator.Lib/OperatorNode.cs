@@ -2,17 +2,23 @@
 {
     internal class OperatorNode // should probably test this directly instead of calculator, would then need to change visibility
     {
+        private const string FailedToParseInput = "Failed to parse input";
+
         public string Calculation { get; set; }
         public OperatorType OperatorType { get; private set; }
         public OperatorNode Left { get; private set; }
         public OperatorNode Right { get; private set; }
         public double? NodeValue { get; set; }
+        public string Error { get; private set; }
 
         public OperatorNode(string input)
         {
             Calculation = input;
             PopulateProperties(input);
-            NodeValue = ComputeValue();
+            if (string.IsNullOrEmpty(Error))
+            {
+                NodeValue = ComputeValue();
+            }
         }
 
         /// <summary>
@@ -58,12 +64,20 @@
                 input = input.Substring(1, input.Length-2);
                 OperatorType = OperatorType.None;
                 Left = new OperatorNode(input);
+                if (!string.IsNullOrEmpty(Left.Error)) Error = Left.Error;
             }
             else
             {
                 OperatorType = OperatorType.None;
                 if (string.IsNullOrEmpty(input)) input = "0";
-                NodeValue = double.Parse(input);
+                try
+                {
+                    NodeValue = double.Parse(input);
+                }
+                catch (FormatException e)
+                {
+                    Error = FailedToParseInput;
+                }
             }
         }
 
@@ -88,7 +102,9 @@
             }
 
             Left = new OperatorNode(input.Substring(0, splitIndex.Value));
+            if (!string.IsNullOrEmpty(Left.Error)) Error = Left.Error;
             Right = new OperatorNode(input.Substring(splitIndex.Value + 1));
+            if (!string.IsNullOrEmpty(Right.Error)) Error = Right.Error;
         }
 
         private int? FindOperatorIndex(string input)

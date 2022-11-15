@@ -85,7 +85,15 @@ namespace MauiCalculator.Lib
 
             var calculation = new OperatorNode(_toCompute);
 
-            return calculation.NodeValue.HasValue ? calculation.NodeValue.ToString() : "Node value null";
+            if (!string.IsNullOrEmpty(calculation.Error)) 
+            {
+                _clearOnNextClick = true;
+                return calculation.Error; 
+            }
+            if (calculation.NodeValue.HasValue) 
+                return calculation.NodeValue.ToString();
+
+            return "Node value null";
         }
 
         private bool CheckBrackets(string toCompute)
