@@ -75,8 +75,7 @@ namespace MauiCalculator.Lib.Test
         {
             var calculator = new Calculator();
             calculator.Append("(9+3)9");
-            calculator.Calculate();
-            Assert.True(string.Equals("Failed to parse input", calculator.Calculate()));
+            Assert.False(string.IsNullOrEmpty(calculator.Calculate()));
         }
     }
 }

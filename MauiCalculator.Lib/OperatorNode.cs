@@ -70,14 +70,9 @@
             {
                 OperatorType = OperatorType.None;
                 if (string.IsNullOrEmpty(input)) input = "0";
-                try
-                {
-                    NodeValue = double.Parse(input);
-                }
-                catch (FormatException e)
-                {
-                    Error = FailedToParseInput;
-                }
+                var success = double.TryParse(input, out double output);
+                if(success) NodeValue = output;
+                else Error = FailedToParseInput;
             }
         }
 
